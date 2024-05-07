@@ -1,0 +1,30 @@
+[package]
+name = "rust-wasm-ipa-edit"
+version = "0.0.1"
+authors = ["lake <102535481@qq.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+default = ["console_error_panic_hook"]
+
+[dependencies]
+wasm-bindgen = { version = "0.2.84", features = ["serde-serialize"] }
+plist = { version = "1.6.1", features = ["serde"] }
+serde-wasm-bindgen = "0.6.5"
+base64 = "0.22.1"
+zip = { version = "1.2.1", default-features = false, features = ["deflate"] }
+image = { version = "0.25.1", features = ["png", "jpeg", "gif"] }
+console_error_panic_hook = { version = "0.1.7", optional = true }
+js-sys = "0.3.69"
+web-sys = { version = "0.3.69", features = ["console", "Window", "MessageEvent", "Worker"] }
+serde = { version = "1.0.200", features = ["derive"] }
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.34"
+
+[profile.release]
+# Tell `rustc` to optimize for small code size.
+opt-level = "s"
