@@ -57,7 +57,6 @@ impl IpaXmlInfo {
 #[derive(Debug, Serialize, Deserialize)]
 struct IpaInfo {
     app_name: String,
-    app_display_name: String,
     app_bundle_id: String,
     app_version: String,
     app_min_os_version: String,
@@ -163,7 +162,10 @@ pub fn create(
     let xml = plist_xml
         .as_dictionary_mut()
         .ok_or("Failed to parse plist")?;
-    xml.insert("CFBundleName".to_string(), plist::Value::String(app_name));
+    xml.insert(
+        "CFBundleDisplayName".to_string(),
+        plist::Value::String(app_name),
+    );
     //set app_bundle_id
     xml.insert(
         "CFBundleIdentifier".to_string(),
@@ -398,8 +400,10 @@ pub fn parser(bytes: &[u8], _callback: Option<Function>) -> Result<JsValue, Stri
             }
         }
     }
-    let app_name = plist_info.CFBundleName.unwrap_or("".to_string());
-    let app_display_name = plist_info.CFBundleDisplayName.unwrap_or("".to_string());
+    let app_display_name = plist_info
+        .CFBundleDisplayName
+        .or(plist_info.CFBundleName)
+        .unwrap_or_default();
     let app_bundle_id = plist_info.CFBundleIdentifier.unwrap_or("".to_string());
     let app_version = plist_info
         .CFBundleShortVersionString
@@ -407,8 +411,7 @@ pub fn parser(bytes: &[u8], _callback: Option<Function>) -> Result<JsValue, Stri
     let app_min_os_version = plist_info.MinimumOSVersion.unwrap_or("".to_string());
     let plist = String::from_utf8_lossy(&info_plist_buf).to_string();
     let info = IpaInfo {
-        app_name,
-        app_display_name,
+        app_name: app_display_name,
         app_bundle_id,
         app_version,
         app_min_os_version,
