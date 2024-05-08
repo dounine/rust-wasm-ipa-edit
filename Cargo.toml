@@ -13,10 +13,12 @@ default = ["console_error_panic_hook"]
 [dependencies]
 wasm-bindgen = { version = "0.2.84", features = ["serde-serialize"] }
 plist = { version = "1.6.1", features = ["serde"] }
+jpeg-decoder = "0.3.1"
+png = "0.17.13"
 serde-wasm-bindgen = "0.6.5"
 base64 = "0.22.1"
 zip = { version = "1.2.1", default-features = false, features = ["deflate"] }
-image = { version = "0.25.1", features = ["png", "jpeg", "gif"] }
+#image = { version = "0.25.1", features = ["png", "jpeg"] }
 console_error_panic_hook = { version = "0.1.7", optional = true }
 js-sys = "0.3.69"
 web-sys = { version = "0.3.69", features = ["console", "Window", "MessageEvent", "Worker"] }
